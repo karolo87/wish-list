@@ -1,0 +1,4 @@
+ENCJE:
+	-User -> id, firstName, lastName, login, list<Gift> wishList, list<Users> friends
+	-Gift -> id, name, description, boolean isReserved
+	
