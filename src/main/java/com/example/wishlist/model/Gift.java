@@ -1,11 +1,10 @@
 package com.example.wishlist.model;
 
+import com.fasterxml.jackson.annotation.JsonValue;
 import lombok.Data;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Data
@@ -16,5 +15,7 @@ public class Gift {
     private Long id;
     private String name;
     private String description;
-    private boolean isReserved;
+    private Boolean isReserved;
+//    @ManyToOne
+//    private User user;
 }

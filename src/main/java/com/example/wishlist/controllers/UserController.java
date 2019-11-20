@@ -1,5 +1,6 @@
 package com.example.wishlist.controllers;
 
+import com.example.wishlist.model.Gift;
 import com.example.wishlist.model.User;
 import com.example.wishlist.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -31,5 +32,10 @@ public class UserController {
     @DeleteMapping("/api/user/{userId}")
     public void deleteUserById(@PathVariable ("userId") Long userId) {
         userService.deleteUserById(userId);
+    }
+
+    @PutMapping("/api/user/{userId}/add-gift")
+    public User addGiftToUser(@PathVariable("userId") Long userId, @RequestBody Gift gift) {
+        return userService.addNewGiftToUser(userId, gift);
     }
 }
