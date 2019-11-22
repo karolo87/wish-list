@@ -1,9 +1,12 @@
 package com.example.wishlist.controllers;
 
+import com.example.wishlist.dto.RegisterUserDto;
 import com.example.wishlist.model.Gift;
 import com.example.wishlist.model.User;
 import com.example.wishlist.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -19,9 +22,10 @@ public class UserController {
         return userService.getAllUsers();
     }
 
-    @PostMapping("/api/user")
-    public User addNewUser(@RequestBody User user) {
-        return userService.addNewUser(user);
+    @PostMapping("/api/user/register")
+    public ResponseEntity addNewUser(@RequestBody RegisterUserDto userDto) {
+        userService.addNewUser(userDto);
+        return new ResponseEntity(HttpStatus.OK);
     }
 
     @GetMapping("/api/user/{userId}")

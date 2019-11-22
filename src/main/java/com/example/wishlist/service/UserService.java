@@ -1,11 +1,14 @@
 package com.example.wishlist.service;
 
+import com.example.wishlist.dto.RegisterUserDto;
 import com.example.wishlist.model.Gift;
 import com.example.wishlist.model.User;
 import com.example.wishlist.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -15,13 +18,26 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final GiftService giftService;
+    private final PasswordEncoder passwordEncoder;
 
     public List<User> getAllUsers() {
         return userRepository.findAll();
     }
 
-    public User addNewUser(User user) {
+    public User addNewUser(RegisterUserDto userDto) {
+        User user = new User();
+        user.setFirstName(userDto.getFirstName());
+        user.setLastName(userDto.getLastName());
+        user.setUsername(userDto.getUsername());
+        user.setEmail(userDto.getEmail());
+        user.setPassword(encodePassword(userDto.getPassword()));
+        user.setConfirmPassword(encodePassword(userDto.getPassword()));
+        user.setGiftList(new ArrayList<>());
         return userRepository.save(user);
+    }
+
+    private String encodePassword(String password) {
+        return passwordEncoder.encode(password);
     }
 
     public void deleteUserById(Long userId) {
