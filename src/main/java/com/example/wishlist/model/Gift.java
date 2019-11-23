@@ -16,6 +16,5 @@ public class Gift {
     private String name;
     private String description;
     private Boolean isReserved;
-//    @ManyToOne
-//    private User user;
+
 }

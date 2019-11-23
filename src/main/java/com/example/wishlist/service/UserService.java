@@ -1,10 +1,16 @@
 package com.example.wishlist.service;
 
+import com.example.wishlist.dto.LoginDto;
 import com.example.wishlist.dto.RegisterUserDto;
 import com.example.wishlist.model.Gift;
 import com.example.wishlist.model.User;
 import com.example.wishlist.repository.UserRepository;
+import com.example.wishlist.security.JwtProvider;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -19,6 +25,8 @@ public class UserService {
     private final UserRepository userRepository;
     private final GiftService giftService;
     private final PasswordEncoder passwordEncoder;
+    private final AuthenticationManager authenticationManager;
+    private final JwtProvider jwtProvider;
 
     public List<User> getAllUsers() {
         return userRepository.findAll();
@@ -63,5 +71,12 @@ public class UserService {
         } else {
             return null;
         }
+    }
+
+    public String login(LoginDto loginDto) {
+        Authentication authenticate = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
+                loginDto.getUsername(), loginDto.getPassword()));
+        SecurityContextHolder.getContext().setAuthentication(authenticate);
+        return jwtProvider.generateToken(authenticate);
     }
 }
