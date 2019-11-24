@@ -1,5 +1,6 @@
 package com.example.wishlist.controllers;
 
+import com.example.wishlist.dto.GiftDto;
 import com.example.wishlist.dto.LoginDto;
 import com.example.wishlist.dto.RegisterUserDto;
 import com.example.wishlist.model.Gift;
@@ -46,7 +47,7 @@ public class UserController {
     }
 
     @PutMapping("/{userId}/add-gift")
-    public User addGiftToUser(@PathVariable("userId") Long userId, @RequestBody Gift gift) {
-        return userService.addNewGiftToUser(userId, gift);
+    public User addGiftToUser(@PathVariable("userId") Long userId, @RequestBody GiftDto giftDto) {
+        return userService.addNewGiftToUser(userId, giftDto);
     }
 }

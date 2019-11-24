@@ -2,6 +2,7 @@ package com.example.wishlist.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 
 import javax.persistence.*;
 import java.util.List;

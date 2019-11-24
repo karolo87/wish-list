@@ -1,8 +1,11 @@
 package com.example.wishlist.controllers;
 
+import com.example.wishlist.dto.GiftDto;
 import com.example.wishlist.model.Gift;
 import com.example.wishlist.service.GiftService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -22,7 +25,8 @@ public class GiftController {
     }
 
     @PostMapping("/api/gift")
-    public Gift addNewGift(@RequestBody Gift gift) {
-        return giftService.addNewGift(gift);
+    public ResponseEntity addNewGift(@RequestBody GiftDto giftDto) {
+        giftService.addNewGift(giftDto);
+        return new ResponseEntity(HttpStatus.OK);
     }
 }

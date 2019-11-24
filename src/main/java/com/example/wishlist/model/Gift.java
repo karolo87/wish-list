@@ -16,5 +16,6 @@ public class Gift {
     private String name;
     private String description;
     private Boolean isReserved;
+    private String username;
 
 }

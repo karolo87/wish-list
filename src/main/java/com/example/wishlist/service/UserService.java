@@ -1,5 +1,6 @@
 package com.example.wishlist.service;
 
+import com.example.wishlist.dto.GiftDto;
 import com.example.wishlist.dto.LoginDto;
 import com.example.wishlist.dto.RegisterUserDto;
 import com.example.wishlist.model.Gift;
@@ -59,11 +60,11 @@ public class UserService {
         return foundUser.orElse(null);
     }
 
-    public User addNewGiftToUser(Long userId, Gift gift) {
+    public User addNewGiftToUser(Long userId, GiftDto giftDto) {
         Optional<User> foundUser = userRepository.findById(userId);
         if (foundUser.isPresent()) {
             User user = foundUser.get();
-            giftService.addNewGift(gift);
+            Gift gift = giftService.addNewGift(giftDto);
             user
                     .getGiftList()
                     .add(gift);
@@ -78,5 +79,17 @@ public class UserService {
                 loginDto.getUsername(), loginDto.getPassword()));
         SecurityContextHolder.getContext().setAuthentication(authenticate);
         return jwtProvider.generateToken(authenticate);
+    }
+
+    public Optional<org.springframework.security.core.userdetails.User> getCurrentUser() {
+        org.springframework.security.core.userdetails.User principal =
+                (org.springframework.security.core.userdetails.User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return Optional.of(principal);
+    }
+
+    public Long getCurrentUserId() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User user = (User) authentication.getDetails();
+        return user.getId();
     }
 }
