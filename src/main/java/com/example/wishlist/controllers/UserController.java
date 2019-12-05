@@ -5,6 +5,7 @@ import com.example.wishlist.dto.LoginDto;
 import com.example.wishlist.dto.RegisterUserDto;
 import com.example.wishlist.model.Gift;
 import com.example.wishlist.model.User;
+import com.example.wishlist.service.AuthenticationResponse;
 import com.example.wishlist.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -32,7 +33,7 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public String login(@RequestBody LoginDto loginDto) {
+    public AuthenticationResponse login(@RequestBody LoginDto loginDto) {
         return userService.login(loginDto);
     }
 
