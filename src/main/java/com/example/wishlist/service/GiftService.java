@@ -3,7 +3,11 @@ package com.example.wishlist.service;
 import com.example.wishlist.dto.GiftDto;
 import com.example.wishlist.model.Gift;
 import com.example.wishlist.repository.GiftRepository;
+import com.example.wishlist.security.JwtProvider;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Service;
 
@@ -15,7 +19,8 @@ import java.util.Optional;
 public class GiftService {
 
     private final GiftRepository giftRepository;
-//    private final UserService userService;
+    private final JwtProvider jwtProvider;
+    private final UserService userService;
 
     public List<Gift> getAllGifts() {
         return giftRepository.findAll();
@@ -23,14 +28,6 @@ public class GiftService {
 
     public Gift addNewGift(GiftDto giftDto) {
         Gift gift = makeGiftFromDto(giftDto);
-//        Optional<User> currentUser = userService.getCurrentUser();
-//        if (currentUser.isPresent()) {
-//            Long currentUserId = userService.getCurrentUserId();
-//            com.example.wishlist.model.User user = userService.getUserById(currentUserId);
-//            user
-//                    .getGiftList()
-//                    .add(gift);
-//        }
         return giftRepository.save(gift);
     }
 
@@ -45,9 +42,12 @@ public class GiftService {
         gift.setName(giftDto.getName());
         gift.setDescription(giftDto.getDescription());
         gift.setIsReserved(false);
-//        User username = userService.getCurrentUser().orElseThrow(()->
-//                new IllegalArgumentException("No user logged in!"));
-//        gift.setUsername(username.getUsername());
+        User user = userService.getCurrentUser().orElseThrow(() -> new IllegalArgumentException("No user logged in."));
+        gift.setUsername(user.getUsername());
+
+        userService.findUserByUsername(user.getUsername())
+                .getGiftList().add(gift);
+
         return gift;
     }
 

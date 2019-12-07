@@ -12,6 +12,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -24,7 +25,7 @@ import java.util.Optional;
 public class UserService {
 
     private final UserRepository userRepository;
-    private final GiftService giftService;
+//    private final GiftService giftService;
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
     private final JwtProvider jwtProvider;
@@ -60,19 +61,19 @@ public class UserService {
         return foundUser.orElse(null);
     }
 
-    public User addNewGiftToUser(Long userId, GiftDto giftDto) {
-        Optional<User> foundUser = userRepository.findById(userId);
-        if (foundUser.isPresent()) {
-            User user = foundUser.get();
-            Gift gift = giftService.addNewGift(giftDto);
-            user
-                    .getGiftList()
-                    .add(gift);
-            return userRepository.save(user);
-        } else {
-            return null;
-        }
-    }
+//    public User addNewGiftToUser(Long userId, GiftDto giftDto) {
+//        Optional<User> foundUser = userRepository.findById(userId);
+//        if (foundUser.isPresent()) {
+//            User user = foundUser.get();
+//            Gift gift = giftService.addNewGift(giftDto);
+//            user
+//                    .getGiftList()
+//                    .add(gift);
+//            return userRepository.save(user);
+//        } else {
+//            return null;
+//        }
+//    }
 
     public AuthenticationResponse login(LoginDto loginDto) {
         Authentication authenticate = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
@@ -92,5 +93,10 @@ public class UserService {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User user = (User) authentication.getDetails();
         return user.getId();
+    }
+
+    public User findUserByUsername(String username) {
+        return userRepository.findByUsername(username).orElseThrow(() ->
+                new UsernameNotFoundException("User " + username + " not found!"));
     }
 }

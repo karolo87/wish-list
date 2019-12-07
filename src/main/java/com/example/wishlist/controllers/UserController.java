@@ -47,8 +47,4 @@ public class UserController {
         userService.deleteUserById(userId);
     }
 
-    @PutMapping("/{userId}/add-gift")
-    public User addGiftToUser(@PathVariable("userId") Long userId, @RequestBody GiftDto giftDto) {
-        return userService.addNewGiftToUser(userId, giftDto);
-    }
 }
