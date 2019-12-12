@@ -1,13 +1,11 @@
 package com.example.wishlist.service;
 
 import com.example.wishlist.dto.GiftDto;
+import com.example.wishlist.exception.WishListException;
 import com.example.wishlist.model.Gift;
 import com.example.wishlist.repository.GiftRepository;
 import com.example.wishlist.security.JwtProvider;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContext;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Service;
 
@@ -56,5 +54,10 @@ public class GiftService {
         giftDto.setName(gift.getName());
         giftDto.setDescription(gift.getDescription());
         return giftDto;
+    }
+
+    public Gift getGiftById(Long giftId) {
+        Optional<Gift> gift = giftRepository.findById(giftId);
+        return gift.orElseThrow(()-> new WishListException("Gift not found"));
     }
 }
